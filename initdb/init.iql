@@ -1,0 +1,5 @@
+CREATE DATABASE progetto
+CREATE USER python WITH PASSWORD 'python'
+GRANT WRITE ON progetto TO python
+CREATE USER grafana WITH PASSWORD 'grafana'
+GRANT READ ON progetto TO grafana

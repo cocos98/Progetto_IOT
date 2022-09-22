@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+  influx:
+    image: db
+    build: ./initdb
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb:/var/lib/influxdb
+  sensors:
+    image: water_sens
+    build:
+      context: ./src
+      target: sensorimg
+    init: true
+    privileged: true
+    devices:
+      - "/dev/tty.usbmodem1301:/dev/ttyUSB0"
+    links:
+      - influx
+    depends_on:
+      - influx
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana:/var/lib/grafana
+    links:
+      - influx
+    depends_on:
+      - influx
+volumes:
+  influxdb:
+    external: true
+  grafana:
+    external: true
